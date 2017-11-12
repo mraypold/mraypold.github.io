@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  
+  <url>
+    <loc>http://raypold.com/post/laravel-distributed-maintenance-mode/</loc>
+    <lastmod>2017-10-07T06:50:24-07:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://raypold.com/about/</loc>
+    <lastmod>2017-10-07T06:50:12-07:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://raypold.com/tags/</loc>
+    <lastmod>2017-10-07T06:50:12-07:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://raypold.com/categories/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://raypold.com/tags/laravel/</loc>
+    <lastmod>2017-10-07T06:50:24-07:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://raypold.com/</loc>
+    <lastmod>2017-10-07T06:50:24-07:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://raypold.com/tags/php/</loc>
+    <lastmod>2017-10-07T06:50:24-07:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://raypold.com/post/</loc>
+    <lastmod>2017-10-07T06:50:24-07:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://raypold.com/tags/redis/</loc>
+    <lastmod>2017-10-07T06:50:24-07:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+</urlset>

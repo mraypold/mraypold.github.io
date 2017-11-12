@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Index on Michael Raypold</title>
+    <link>http://raypold.com/tags/</link>
+    <description>Recent content in Index on Michael Raypold</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 07 Oct 2017 06:50:12 -0700</lastBuildDate>
+    
+	<atom:link href="http://raypold.com/tags/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Laravel</title>
+      <link>http://raypold.com/tags/laravel/</link>
+      <pubDate>Sat, 07 Oct 2017 06:50:24 -0700</pubDate>
+      
+      <guid>http://raypold.com/tags/laravel/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Php</title>
+      <link>http://raypold.com/tags/php/</link>
+      <pubDate>Sat, 07 Oct 2017 06:50:24 -0700</pubDate>
+      
+      <guid>http://raypold.com/tags/php/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Redis</title>
+      <link>http://raypold.com/tags/redis/</link>
+      <pubDate>Sat, 07 Oct 2017 06:50:24 -0700</pubDate>
+      
+      <guid>http://raypold.com/tags/redis/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

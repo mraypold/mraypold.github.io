@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Michael Raypold</title>
+    <link>http://raypold.com/</link>
+    <description>Recent content on Michael Raypold</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 07 Oct 2017 06:50:24 -0700</lastBuildDate>
+    
+	<atom:link href="http://raypold.com/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Laravel Distributed Maintenance Mode</title>
+      <link>http://raypold.com/post/laravel-distributed-maintenance-mode/</link>
+      <pubDate>Sat, 07 Oct 2017 06:50:24 -0700</pubDate>
+      
+      <guid>http://raypold.com/post/laravel-distributed-maintenance-mode/</guid>
+      <description>The Laravel maintainers have begun to invest more time in providing features and tooling for managing Laravel in a distributed environment.
+Laravel 5.4 modified the withoutOverlapping() option for kernel tasks (PR #16196) to use the cache to create a lock and prevent overlapping scheduled tasks across instances.
+Laravel Horizon makes it easier to monitor and maintain Laravel powered Redis queues in both a distributed and single instance deployment.
+Laravel 5.</description>
+    </item>
+    
+  </channel>
+</rss>
