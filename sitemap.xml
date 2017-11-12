@@ -3,51 +3,51 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>http://raypold.com/post/laravel-distributed-maintenance-mode/</loc>
+    <loc>/post/laravel-distributed-maintenance-mode/</loc>
     <lastmod>2017-10-07T06:50:24-07:00</lastmod>
   </url>
   
   <url>
-    <loc>http://raypold.com/about/</loc>
+    <loc>/about/</loc>
     <lastmod>2017-10-07T06:50:12-07:00</lastmod>
   </url>
   
   <url>
-    <loc>http://raypold.com/tags/</loc>
+    <loc>/tags/</loc>
     <lastmod>2017-10-07T06:50:12-07:00</lastmod>
   </url>
   
   <url>
-    <loc>http://raypold.com/categories/</loc>
+    <loc>/categories/</loc>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://raypold.com/tags/laravel/</loc>
+    <loc>/tags/laravel/</loc>
     <lastmod>2017-10-07T06:50:24-07:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://raypold.com/</loc>
+    <loc>/</loc>
     <lastmod>2017-10-07T06:50:24-07:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://raypold.com/tags/php/</loc>
+    <loc>/tags/php/</loc>
     <lastmod>2017-10-07T06:50:24-07:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://raypold.com/post/</loc>
+    <loc>/post/</loc>
     <lastmod>2017-10-07T06:50:24-07:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://raypold.com/tags/redis/</loc>
+    <loc>/tags/redis/</loc>
     <lastmod>2017-10-07T06:50:24-07:00</lastmod>
     <priority>0</priority>
   </url>
