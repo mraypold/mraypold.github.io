@@ -44,7 +44,7 @@
                     </h1>
                     <h2 class="headline">
                     Oct 7, 2017 06:50
-                    · 2441 words
+                    · 2443 words
                     · 12 minutes read
                       <span class="tags">
                       
@@ -81,9 +81,9 @@
 
 <p><a href="https://laravel.com/docs/5.5/configuration#maintenance-mode">Maintenance mode</a> displays a maintenance page to visitors as well as prevents queued jobs from running.</p>
 
-<p>Therefore, if you are using the laravel job queue or scheduled tasks, simply pointing your domain to a static maintenance page is not an ideal solution, as background jobs will continue to run and interact with your database and cache.</p>
+<p>Therefore, if you are using the Laravel job queue or scheduled tasks, simply pointing your domain to a static maintenance page is not an ideal solution, as background jobs will continue to run and interact with your database and cache.</p>
 
-<p>If you have unexpected long running migration, or you need to perform emergency maintenance on a Laravel deployement that has background tasks, re-routing traffic to a static maintenance page is not an ideal solution.</p>
+<p>If you have unexpected long running migration, or you need to perform emergency maintenance on a Laravel deployment that has background tasks, re-routing traffic to a static maintenance page is not an ideal solution.</p>
 
 <h3 id="how-does-maintenance-mode-work">How Does Maintenance Mode Work</h3>
 
@@ -135,7 +135,7 @@
 
 <p>source <a href="https://github.com/laravel/framework/blob/26c700eb79e5bb55b59df2c495c9c71f16f43302/src/Illuminate/Foundation/Application.php#L903">Application.php</a></p>
 
-<h3 id="why-the-current-solution-doesn-t-work-in-a-distributed-environment">Why the Current Solution Doesn&rsquo;t Work in a Distributed Environment</h3>
+<h3 id="why-the-current-solution-doesnt-t-work-in-a-distributed-environment">Why the Current Solution Doesnt&rsquo;t Work in a Distributed Environment</h3>
 
 <p>If your storage directory is shared across all your deployed instances, the current solution is fine.</p>
 
@@ -147,7 +147,7 @@
 
 <p>Thankfully, we can follow a similar approach outlined in <a href="https://github.com/laravel/framework/pull/16196">PR #16196</a> where a lock is checked to confirm that the kernel command is not already running elsewhere.</p>
 
-<p>By using a lock, we can set a maintenance mode lock in Redis that is checked by all deployed instances before continuing the request lifecycle.</p>
+<p>By using the cache, we can set a maintenance mode lock in Redis that is checked by all deployed instances before continuing the request lifecycle.</p>
 
 <h4 id="plan-of-attack">Plan of Attack</h4>
 
@@ -166,7 +166,9 @@
 
 <p>The reason we&rsquo;re using enums is so that we can easily update the cache key without having to hunt down and potentially miss references throughout the application if we ever want to update the keys in the future.</p>
 
-<p>Here, I&rsquo;m just using an abstract class, but you could alternatively put these in a config file. I find this approach cleaner and use it frequently.</p>
+<p>Here, I&rsquo;m just using an abstract class, but you could alternatively put these in a config file.</p>
+
+<p>I find this approach cleaner and use it frequently.</p>
 
 <pre><code class="language-php">&lt;?php
 
@@ -395,7 +397,7 @@ $app = new App\Extensions\Illuminate\Foundation\Application(
 
 <p>The final step that needs to be taken is to extend the maintenance mode middleware that ships with the framework.</p>
 
-<p>This middleware is checked everytime a request comes into the application. We want it to now query the cache lock that we have created instead of the storage directory.</p>
+<p>This middleware is checked every time a request comes into the application. We want it to now query the cache lock that we have created instead of the storage directory.</p>
 
 <pre><code class="language-php">&lt;?php
 
@@ -434,7 +436,7 @@ class CheckForMaintenanceMode extends MaintenanceMode
 }
 </code></pre>
 
-<p>Laravel uses the <code>\Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode::class</code> in the http kernel global middleware grouping which needs to be replaced with out new custom middleware as such.</p>
+<p>Laravel uses the <code>\Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode::class</code> in the HTTP kernel global middleware grouping which needs to be replaced with our new custom middleware as such.</p>
 
 <pre><code class="language-php">&lt;?php
 
@@ -468,7 +470,7 @@ class Kernel extends HttpKernel
 
 <p>There are a couple different ways you can approach testing this feature.</p>
 
-<p>The first is a straight forward integration test where you put the application in maintenance mode and then assert that the user cannot access the home route. That might look like the following.</p>
+<p>The first is a straight forward integration test where you put the application into maintenance mode and then assert that the user cannot access the home route. That might look like the following.</p>
 
 <pre><code class="language-php">public function test_home_should_not_be_accessible_in_maintenance_mode()
 {
@@ -510,7 +512,7 @@ public function test_isDownForMaintenance_returns_false_when_not_in_maintence_mo
 
 <h3 id="production-environment-performance-difference">Production Environment Performance Difference</h3>
 
-<p>Unfortunately, I can&rsquo;t give a true apples to apples comparison as this wasn&rsquo;t tested in a controlled environment. The deployment of this upgrade also enabled the OPcache. If you aren&rsquo;t already using the OPcache, I highly recommend doing some <a href="https://medium.com/appstract/make-your-laravel-app-fly-with-php-opcache-9948db2a5f93">reading on it</a> and enabling it on your production servers.</p>
+<p>Unfortunately, I can&rsquo;t give a true apples to apples comparison as this was not tested in a controlled environment. The deployment of this upgrade also enabled the OPcache. If you aren&rsquo;t already using the OPcache, I highly recommend doing some <a href="https://medium.com/appstract/make-your-laravel-app-fly-with-php-opcache-9948db2a5f93">reading on it</a> and enabling it on your production servers.</p>
 
 <p>That being said, our production servers (m4.large) currently have a latency of around 80ms. Your performance will differ based on where your cache is located, the size of your server, php version, etc&hellip;</p>
 
