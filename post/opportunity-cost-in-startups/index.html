@@ -1,0 +1,221 @@
+    <!DOCTYPE html>
+<html lang="en-us">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="author" content="Michael Raypold">
+		
+		<meta name="generator" content="Hugo 0.29" />
+		<title>Sofware Development and Opportunity Cost in a Startup &middot; Michael Raypold</title>
+		<link rel="shortcut icon" href="/images/favicon.ico">
+		<link rel="stylesheet" href="/css/style.css">
+		<link rel="stylesheet" href="/css/highlight.css">
+		
+
+		
+		<link rel="stylesheet" href="/css/font-awesome.min.css">
+		
+
+		
+	</head>
+
+    <body>
+       <nav class="main-nav">
+	
+	
+		<a href='/'> <span class="arrow">←</span>Home</a>
+	
+	<a href='/post'>Archive</a>
+	<a href='/tags'>Tags</a>
+	<a href='/about'>About</a>
+
+	
+
+	
+</nav>
+
+
+        <section id="wrapper">
+            <article class="post">
+                <header>
+                    <h1>
+                        Sofware Development and Opportunity Cost in a Startup
+                    </h1>
+                    <h2 class="headline">
+                    Dec 15, 2018 09:12
+                    · 2284 words
+                    · 11 minutes read
+                      <span class="tags">
+                      
+                      
+                          
+                              <a href="/tags/software-development">Software Development</a>
+                          
+                              <a href="/tags/engineering-management">Engineering Management</a>
+                          
+                              <a href="/tags/startup">Startup</a>
+                          
+                              <a href="/tags/economics">Economics</a>
+                          
+                      
+                      
+                      </span>
+                    </h2>
+                </header>
+                
+                <section id="post-body">
+                    
+
+<p>Launching a startup and growing it to become a successful business is, as Reid Hoffman often puts, akin to jumping off a cliff and trying to assemble a plane on the way down. The trick is to get the plane assembled before you either pull the parachute and move on, or your half-assembled mess of parts, people and processes start colliding with the ground below.</p>
+
+<p>Building a company from nothing is difficult. As software developers, we often spend far more time re-engineering solutions to already solved problems because we enjoy the thrill of doing it ourselves, instead of putting time and money behind improving processes, management, product and sales.</p>
+
+<p>Opportunity cost is the foregone value of a decision, relative to the next best alternative. Every decision you make as a tech lead or software developer in a startup requires you to decide how to best utilize the limited resources at your disposal to extend the amount of time you have to assemble your plane that continues its courtship with the ground.</p>
+
+<p>Ries, of The Lean Startup, terms startups as “a human institution designed to create a new product or service under conditions of extreme uncertainty”. As an engineering lead or software developer, we must consider optimizing to reduce uncertainty, ship code that can be validated by customers and provide infrastructure and processes that tighten the feedback loop. Technical ingenuity alone is not going to help the company achieve flight.</p>
+
+<p>The opportunity cost of technical decisions should therefore take into account the following:</p>
+
+<ul>
+<li>The ongoing maintenance overhead of existing and future software or infrastructure.</li>
+<li>The readability of a codebase and the ability to onboard new contributors in a timely fashion.</li>
+<li>Sales churn because of bugs, missing or poorly implemented features.</li>
+<li>The time to deploy features or fixes, resulting in a longer feedback loop and slower validation.</li>
+</ul>
+
+<p>While it is tempting to think of software development purely in terms of Big O notation protocols, abstractions and frameworks, great developers and development leads evaluate the business impact of every decision and architecture choice they make or do not make.</p>
+
+<p>Knowing when to say no to certain customers, requests or architectural decisions can be just as important as saying yes. A lack of focus in a startup, results in a company doing nothing well.</p>
+
+<p>In larger, more mature companies, these decisions might already be made and handed down by more experienced developers or management teams. In a startup, your first hires and contributors need to consider the entire problem set, or at the very least, an expanded problem set when making technical decisions and contributing to code and processes.</p>
+
+<hr />
+
+<h2 id="long-term-vs-short-term-costs">Long Term vs Short Term Costs</h2>
+
+<p>In the short term, any decision you make to achieve vertical lift will have a large number of fixed variables. You likely cannot change the size of your dev team, hire for specific roles and learn a new language or framework.</p>
+
+<p>In the long term, you have many more levers to pull and forward-looking decisions will be clouded with less uncertainty; assuming the availability of capital.</p>
+
+<p>Many infrastructure as a service (IaaS) and platform as a service (PaaS) companies provide value based pricing, that make it much easier for startups and established companies to work through the build-vs-buy conundrum, thus allowing a startup to focus on what makes the product unique, instead of re-implementing commoditized services or infrastructure.</p>
+
+<p>Cloud providers like AWS, Azure and DigitalOcean often seem more expensive than purchasing bare metal instances in a datacenter, but in turn, they have offloaded some of the operations expertise, maintenance and elasticity overhead, allowing companies to focus on their core business. When you evaluate the total all in cost for a small company, it is often the case that these offering are far cheaper than the re-implementation cost in-house, because the costs have been amortized across a larger customer base.</p>
+
+<p>Does your development or operations team have significant experience running bare metal database instances? If not, maybe you should be reaching for a managed database service like RDS to offload the costs associated with security patches, backups and high availability.</p>
+
+<p>Cloud revenue continues to grow at double digit rates because services provided by the likes of AWS free up a company’s resources (most importantly human capital) to specialize, allowing companies to leverage comparative advantage; the basis for free trade and economic progress for the last century.</p>
+
+<p>In the short term, on a fixed budget, these value-based pricing offerings that are designed to scale with your business, often make much more sense than building it yourself. If you have reached the size where “build-vs-buy shifts to “build”, congratulations, you’ve likely made it as a startup. You now have the unfortunate problem of figuring out how to reduce vendor lock-in, which likely wasn’t costed into your initial plan (nor should it have been).</p>
+
+<p>While, this may come natural to some, I’m often surprised when I go to meetups and hear of smaller companies running their own Jenkins cluster, or custom writing an authentication system instead of using a framework or Auth0, or using young programming languages like elixir for CRUD based workflows that will make it more difficult to hire and onboard developers in the future. As much as I want to learn elixir and find it to be a fascinating language, there are underlying ecosystem and maturity costs that one must factor into the decision to reach for it as opposed to something more mature like javascript/Node.js.</p>
+
+<p>How much more quickly are you going to find an answer to your javascript or PHP problem on StackOverflow than elixir? Similar metrics can likely be devised for the maturity of a framework and the ability to find answers when browsing through the Github issues page.</p>
+
+<p>Consider that as a startup, you are often trying to provide a new service or product to the market under uncertain conditions. In an environment where you have a fixed amount of time and capital, spending development cycles on well-traversed engineering problems that could have been offloaded to mature frameworks, ecosystems and IaaS or PaaS vendors, means you have less time to dedicate to developing what makes your company unique.</p>
+
+<p>So before deciding to run your own Jenkins cluster, take a look at TravisCI or CircleCI. Instead of using SocketIO, perhaps Pusher or PubNub make more sense. Do you need to manage your own Graphite instance, or will DataDog get the job done and allow you to spend more time working on features and a moat that separate your startup from the competition?</p>
+
+<hr />
+
+<h2 id="human-capital">Human Capital</h2>
+
+<p>In the current low interest rate environment, with debt-backed funding being plentiful and the continued movement towards full employment in the tech sector (as of 2018), human capital is often the most expensive to recruit, retain and misuse.</p>
+
+<p>Therefore, when evaluating the costs of decisions, we should put significant weight towards actions that will reduce implementation costs for commodity hardware and services, so as to give more attention to processes and structure that promote developer engagement, reduce burnout and optimize for retention.</p>
+
+<p>Taking time and money away from focusing on processes can be some of the costliest long-term mistakes you make as a tech lead. Quite often, the costs associated with poor process or management aren’t visible for months down the road. The material and emotional costs associated with poor management decisions are some of the most difficult and expensive to recover from; quite often costing key employees and friends. The important thing is to learn from those mistakes so that you don’t repeat them again.</p>
+
+<p>I recently had beer with a friend and listened in horror as he told me of a “code god” at his current company which would commit directly to trunk, often breaking builds, introducing bugs and using non-standard libraries and unreleased (nightly) language features; ignoring the pull request request process to the detriment and annoyance of every other developer on the team. Not only has “code god” become a divisive figure within the team, but his actions occasionally require other developers to re-prioritize work for unexpected fire fighting.</p>
+
+<p>The pull request and continuous integration processes are put in place to improve code quality and provide a more immediate feedback mechanism for catching bugs and issues in the code. Choosing to sidestep or ignore, what should now be industry standard practice to get code into trunk faster, has long term costs. It is often cheaper and easier to find a bug when a developer and the team is familiar with the code going into trunk.</p>
+
+<p>We’ll defined processes that every developer adheres to, increase predictability in a startup that is clouded with uncertainty and extreme risk. Planning, remote work and integrating with internal and external teams is significantly easier when processes are put in place that everyone understands.</p>
+
+<p>While there are immediate and highly visible costs to code review and writing unit tests, these costs are often far cheaper than the costs associated with regressions that are created when it inevitably comes time to refactor or extend a legacy code base or when your most senior developers are spending in excess of forty hours a week to maintain a poorly tested and fragile system.</p>
+
+<p>Not only are these developers spending excess time maintaining a system, they are diverting resources away from the important product feedback cycle that is a core requirement in maturing a startup to a functional company.</p>
+
+<p>When those frustrated senior developers leave for greener pastures, what processes, documentation and tests where put in place to protect the company from turnover? How long will it take to onboard new contributors as a result? It is likely that the very reason a young company has turnover is because of poor moral from the immature processes. Employee turnover in a startup can be detrimental if documentation and system tests haven’t been put in place to ramp up new contributors.</p>
+
+<p>We can offload some of the costs associated with testing by using popular open source frameworks or managed services. However, there is little wiggle room to sidestep integration and system testing, or a monitoring and logging solution to reduce the costs associated with, on-call rotation, bug discovery, and fix to deployment time.</p>
+
+<p>As a startup, you are to a large degree optimizing for speed, but one of the absolute worst things you can do is having to tear down your system and start from scratch because it is a poorly architected and un-tested ball of spaghetti. The time spent re-writing the system is time that your competitors, who may have invested correctly in architecture, management, testing and processes, anticipating the long term costs associated with a re-write, are using to catch up or surpass you. In a winner take all industry, this is a death blow.</p>
+
+<p>Lots of developers, love starting from scratch; its fun, there is no cruft and it gives a sense of ownership for a key piece of the business. However, you must consider why you are re-writing the system and take care not to repeat the same mistakes that led the company to this unfortunate outcome. Never spend a dime on a technical solution to something that can first be fixed with process.</p>
+
+<p>Having the development team spend some extra time every week on post-mortems, code review, testing and reading through logs, or remote monitoring like Crashlytics and Sentry should not continuously be ignored to rush out a feature, as the costs begin to compound and slow the business down when you should be scaling.</p>
+
+<p>Of course, there is always the counter argument, that you can to some degree, safely ignore these problems as Facebook and LinkedIn did for many years as they scaled. It wasn’t until Facebook safely achieved exit velocity that it changed from a culture of “move fast and break things” to “move slow with stable infrastructure”. LinkedIn, shortly before going public, halted all development for two months to migrate to continuous integration and build all the supporting infrastructure and tests that were required.</p>
+
+<p>Poor processes, management and bug volume begins to pile up until it becomes a massive cognitive and department crippling problem that grinds feature work to a halt. With continuous integration tooling and infrastructure being provided by managed services for prices far below their value, there is little excuse not to consider adopting them early in development so that a startup can focus on the feedback cycle of product development instead of a maintenance backlog.</p>
+
+<hr />
+
+<h2 id="tl-dr">TL;DR</h2>
+
+<p>To summarize:</p>
+
+<ul>
+<li>Re-implementing well traversed engineering problems in-house, instead of using IaaS, SaaS or PaaS vendors can often push back development on services that make your startup unique in the space and should thus be taken into account when making decisions.</li>
+<li>Optimize development for quick validation and reach for simple architectural solutions and commoditized frameworks and vendors whenever possible. Your customers likely don’t care how your backend works, nor do you know exactly what your customers want when you first begin implementing your tech stack.</li>
+<li>Human capital and employee retention is extremely expensive. Spending money and time on development processes that improve moral and reduce burnout can be much cheaper in the long run.</li>
+<li>Value-based pricing means you can often use external vendors to provide a service more cheaply than in-house.</li>
+<li>Using external vendors and popular frameworks allows you to offload some support, maintenance, testing and architecture overhead so that can focus on product development and sales.</li>
+<li>Strong management, we’ll articulated direction and reasonable development processes pay for themselves in the long run.</li>
+<li>In the short run, you can ignore some of the long-term costs associated with development that will slow down delivery, but as tech debt begins to compound, the more difficult it will be to migrate away and fix, potentially costing you market leadership or positioning.</li>
+</ul>
+
+                </section>
+            </article>
+
+            
+
+            
+
+            
+
+            <footer id="footer">
+    
+        <div id="social">
+
+	
+	
+    <a class="symbol" href="https://github.com/mraypold/">
+        <i class="fa fa-github"></i>
+    </a>
+    
+    <a class="symbol" href="https://medium.com/@mraypold">
+        <i class="fa fa-medium"></i>
+    </a>
+    
+
+
+</div>
+
+    
+    <p class="small">
+    
+       © Copyright 2018 <i class="fa fa-heart" aria-hidden="true"></i> Michael Raypold
+    
+    </p>
+    <p class="small">
+        Powered by <a href="http://www.gohugo.io/">Hugo</a> Theme By <a href="https://github.com/nodejh/hugo-theme-cactus-plus">nodejh</a>
+    </p>
+</footer>
+
+        </section>
+
+        <script src="/js/jquery-2.2.4.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+
+
+    </body>
+</html>

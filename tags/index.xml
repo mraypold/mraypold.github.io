@@ -12,6 +12,24 @@
     
     
     <item>
+      <title>Economics</title>
+      <link>/tags/economics/</link>
+      <pubDate>Sat, 15 Dec 2018 09:12:04 -0800</pubDate>
+      
+      <guid>/tags/economics/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Engineering Management</title>
+      <link>/tags/engineering-management/</link>
+      <pubDate>Sat, 15 Dec 2018 09:12:04 -0800</pubDate>
+      
+      <guid>/tags/engineering-management/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Laravel</title>
       <link>/tags/laravel/</link>
       <pubDate>Sat, 07 Oct 2017 06:50:24 -0700</pubDate>
@@ -35,6 +53,24 @@
       <pubDate>Sat, 07 Oct 2017 06:50:24 -0700</pubDate>
       
       <guid>/tags/redis/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Software Development</title>
+      <link>/tags/software-development/</link>
+      <pubDate>Sat, 15 Dec 2018 09:12:04 -0800</pubDate>
+      
+      <guid>/tags/software-development/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Startup</title>
+      <link>/tags/startup/</link>
+      <pubDate>Sat, 15 Dec 2018 09:12:04 -0800</pubDate>
+      
+      <guid>/tags/startup/</guid>
       <description></description>
     </item>
     

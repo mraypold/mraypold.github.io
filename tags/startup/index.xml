@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Michael Raypold</title>
-    <link>/</link>
-    <description>Recent content on Michael Raypold</description>
+    <title>Startup on Michael Raypold</title>
+    <link>/tags/startup/</link>
+    <description>Recent content in Startup on Michael Raypold</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Sat, 15 Dec 2018 09:12:04 -0800</lastBuildDate>
     
-	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="/tags/startup/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
@@ -19,18 +19,6 @@
       <guid>/post/opportunity-cost-in-startups/</guid>
       <description>Launching a startup and growing it to become a successful business is, as Reid Hoffman often puts, akin to jumping off a cliff and trying to assemble a plane on the way down. The trick is to get the plane assembled before you either pull the parachute and move on, or your half-assembled mess of parts, people and processes start colliding with the ground below.
 Building a company from nothing is difficult.</description>
-    </item>
-    
-    <item>
-      <title>Laravel Distributed Maintenance Mode</title>
-      <link>/post/laravel-distributed-maintenance-mode/</link>
-      <pubDate>Sat, 07 Oct 2017 06:50:24 -0700</pubDate>
-      
-      <guid>/post/laravel-distributed-maintenance-mode/</guid>
-      <description>The Laravel maintainers have begun to invest more time in providing features and tooling for managing Laravel in a distributed environment.
-Laravel 5.4 modified the withoutOverlapping() option for kernel tasks (PR #16196) to use the cache to create a lock and prevent overlapping scheduled tasks across instances.
-Laravel Horizon makes it easier to monitor and maintain Laravel powered Redis queues in both a distributed and single instance deployment.
-Laravel 5.</description>
     </item>
     
   </channel>
