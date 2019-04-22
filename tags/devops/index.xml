@@ -13,10 +13,10 @@
     
     <item>
       <title>Laravel Queues in Production</title>
-      <link>/post/laravel-queues-in-production/</link>
+      <link>/posts/laravel-queues-in-production/</link>
       <pubDate>Sat, 20 Apr 2019 16:58:21 -0700</pubDate>
       
-      <guid>/post/laravel-queues-in-production/</guid>
+      <guid>/posts/laravel-queues-in-production/</guid>
       <description>The Laravel queue and event system is one of the most powerful features of the framework and indispensable if you want to build a modern web application.
 The queue provides a performant means to run background tasks that don’t block your HTTP lifecycle, allowing you to serve up a responsive application to your customers. Typically, you would use the queue to send emails, collect metrics or generate reports, amongst a number of other tasks that are either time consuming, prone to failure or can be done in an asynchronous manner that don’t impede the user’s workflow.</description>
     </item>

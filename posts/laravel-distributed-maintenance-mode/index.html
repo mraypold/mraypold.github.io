@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en-us">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		
+		
+		
+		<meta name="generator" content="Hugo 0.55.3" />
+		<title>Laravel Distributed Maintenance Mode &middot; Michael Raypold</title>
+		<link rel="shortcut icon" href="/images/favicon.ico">
+		<link rel="stylesheet" href="/css/style.css">
+		<link rel="stylesheet" href="/css/highlight.css">
+
+		
+		<link rel="stylesheet" href="/css/font-awesome.min.css">
+		
+
+		
+
+		
+	</head>
+
+    <body>
+       <nav class="main-nav">
+	
+	
+		<a href='/'> <span class="arrow">←</span>Home</a>
+	
+	<a href='/posts'>Archive</a>
+	<a href='/tags'>Tags</a>
+	<a href='/about'>About</a>
+
+	
+
+	
+</nav>
+
+
+        <section id="wrapper" class="post">
+            <article>
+                <header>
+                    <h1>
+                        Laravel Distributed Maintenance Mode
+                    </h1>
+                    <h2 class="headline">
+                    Oct 7, 2017 06:50
+                    · 2443 words
+                    · 12 minute read
+                      <span class="tags">
+                      
+                      
+                          
+                              <a href="/tags/laravel">Laravel</a>
+                          
+                              <a href="/tags/php">PHP</a>
+                          
+                              <a href="/tags/redis">Redis</a>
+                          
+                      
+                      
+                      </span>
+                    </h2>
+                </header>
+                
+                <section id="post-body">
+                    
+
+<p>The Laravel maintainers have begun to invest more time in providing features and tooling for managing Laravel in a distributed environment.</p>
+
+<p>Laravel 5.4 modified the <code>withoutOverlapping()</code> option for kernel tasks (<a href="https://github.com/laravel/framework/pull/16196">PR #16196</a>) to use the cache to create a lock and prevent overlapping scheduled tasks across instances.</p>
+
+<p><a href="https://github.com/laravel/horizon">Laravel Horizon</a> makes it easier to monitor and maintain Laravel powered Redis queues in both a distributed and single instance deployment.</p>
+
+<p><a href="https://laravel-news.com/trusted-proxy">Laravel 5.5 includes TrustedProxy</a> so that you can more easily place your application behind a load balancer.</p>
+
+<p>What is still missing, is the ability to put the application into maintenance mode when running multiple Laravel instances behind a load balancer.</p>
+
+<p>If you don&rsquo;t need to put your app in maintenance mode, but simply need to prevent people from accessing the site for a short time, the easiest option might be to point your domain to a static maintenance page for a while. For example, you could use <a href="http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/RoutingToS3Bucket.html">Route53 to redirect traffic to an s3 bucket</a> containing a maintenance page.</p>
+
+<h3 id="why-do-we-need-maintenance-mode">Why Do We Need Maintenance Mode</h3>
+
+<p><a href="https://laravel.com/docs/5.5/configuration#maintenance-mode">Maintenance mode</a> displays a maintenance page to visitors as well as prevents queued jobs from running.</p>
+
+<p>Therefore, if you are using the Laravel job queue or scheduled tasks, simply pointing your domain to a static maintenance page is not an ideal solution, as background jobs will continue to run and interact with your database and cache.</p>
+
+<p>If you have unexpected long running migration, or you need to perform emergency maintenance on a Laravel deployment that has background tasks, re-routing traffic to a static maintenance page is not an ideal solution.</p>
+
+<h3 id="how-does-maintenance-mode-work">How Does Maintenance Mode Work</h3>
+
+<p>The built in <code>php artisan down</code> command that puts the app into maintenance mode, places a temporary file in the app&rsquo;s storage directory at <code>/framework/down</code>. You can find the code for the <code>DownCommand</code> code <a href="https://github.com/laravel/framework/blob/bd352a0d2ca93775fce8ef02365b03fc4fb8cbb0/src/Illuminate/Foundation/Console/DownCommand.php">here</a>.</p>
+
+<p>When a request is processed by Laravel, it is either handled by the <a href="https://laravel.com/docs/5.5/lifecycle">HTTP or console kernel</a>.</p>
+
+<p>The HTTP kernel is generally the bulk of your application requests and passes through the global HTTP middleware and middleware groups before being sent to your routing files.</p>
+
+<p>The console kernel is used for any scheduled tasks you define.</p>
+
+<p>Both kernels will pass through a <code>CheckForMaintenanceMode</code> middleware that checks if the application is currently in maintenance mode, which then throws an exception that is handled appropriately in the <code>app\Excpetions\Handler.php</code> file.</p>
+
+<pre><code class="language-php">/**
+ * Handle an incoming request.
+ *
+ * @param  \Illuminate\Http\Request  $request
+ * @param  \Closure  $next
+ * @return mixed
+ *
+ * @throws \Symfony\Component\HttpKernel\Exception\HttpException
+ */
+ public function handle($request, Closure $next)
+ {
+      if ($this-&gt;app-&gt;isDownForMaintenance()) {
+        $data = json_decode(file_get_contents($this-&gt;app-&gt;storagePath().'/framework/down'), true);
+        throw new MaintenanceModeException($data['time'], $data['retry'], $data['message']);
+      }
+      return $next($request);
+ }
+</code></pre>
+
+<p>source <a href="https://github.com/laravel/framework/blob/bd352a0d2ca93775fce8ef02365b03fc4fb8cbb0/src/Illuminate/Foundation/Http/Middleware/CheckForMaintenanceMode.php">CheckForMaintenanceMode.php</a></p>
+
+<p>Similar checks are made in the <code>Worker.php</code> and the <code>QueueManager.php</code> files.</p>
+
+<p>Finally, the <code>isDownForMaintenance()</code> command is handled in your application container.</p>
+
+<pre><code class="language-php">/**
+ * Determine if the application is currently down for maintenance.
+ *
+ * @return bool
+ */
+ public function isDownForMaintenance()
+ {
+     return file_exists($this-&gt;storagePath().'/framework/down');
+ }
+</code></pre>
+
+<p>source <a href="https://github.com/laravel/framework/blob/26c700eb79e5bb55b59df2c495c9c71f16f43302/src/Illuminate/Foundation/Application.php#L903">Application.php</a></p>
+
+<h3 id="why-the-current-solution-doesnt-t-work-in-a-distributed-environment">Why the Current Solution Doesnt&rsquo;t Work in a Distributed Environment</h3>
+
+<p>If your storage directory is shared across all your deployed instances, the current solution is fine.</p>
+
+<p>For many deployments, we don&rsquo;t share storage directories across all instances because we don&rsquo;t handle file uploads.</p>
+
+<p>It is also possible that your job queue is managed on a different server than that which is serving your webapp.</p>
+
+<h3 id="solving-distributed-maintenance-mode">Solving Distributed Maintenance Mode.</h3>
+
+<p>Thankfully, we can follow a similar approach outlined in <a href="https://github.com/laravel/framework/pull/16196">PR #16196</a> where a lock is checked to confirm that the kernel command is not already running elsewhere.</p>
+
+<p>By using the cache, we can set a maintenance mode lock in Redis that is checked by all deployed instances before continuing the request lifecycle.</p>
+
+<h4 id="plan-of-attack">Plan of Attack</h4>
+
+<ul>
+<li>Create a maintenance mode enum.</li>
+<li>Extend the <code>php artisan down</code> command and override the <code>handle</code> function.</li>
+<li>Extend the <code>php artisan up</code> command and override the <code>handle</code> function.</li>
+<li>Register the commands in the service provider and kernel.</li>
+<li>Extend the application and override the <code>isDownForMaintenance</code> function.</li>
+<li>Extend the CheckForMaintenanceMode middleware and override the <code>handle</code> function.</li>
+</ul>
+
+<h4 id="creating-the-enums">Creating the Enums</h4>
+
+<p>The first thing that we will do is create some enums for common string based cache keys that will be used throughout the maintenance mode code.</p>
+
+<p>The reason we&rsquo;re using enums is so that we can easily update the cache key without having to hunt down and potentially miss references throughout the application if we ever want to update the keys in the future.</p>
+
+<p>Here, I&rsquo;m just using an abstract class, but you could alternatively put these in a config file.</p>
+
+<p>I find this approach cleaner and use it frequently.</p>
+
+<pre><code class="language-php">&lt;?php
+
+namespace App\Utils\Enums;
+
+abstract class CacheKeys
+{
+    /**
+     * @var string A cache accessor for maintenance mode
+     */
+    const MAINTENANCE_PAYLOAD = 'laravel-maintenance-mode-payload';
+}
+</code></pre>
+
+<h4 id="extending-artisan-down">Extending Artisan Down</h4>
+
+<p>Next, extend Laravel&rsquo;s down command to use the cache instead of the filesystem.</p>
+
+<p>Notice that <code>CacheKeys::MAINTENANCE_PAYLOAD</code> references the enum we created above. This will be used in all the extensions that are created.</p>
+
+<pre><code class="language-php">&lt;?php
+
+namespace App\Console\Commands;
+
+use App\Utils\Enums\CacheKeys;
+use Cache;
+use Illuminate\Foundation\Console\DownCommand as Down;
+
+class DownCommand extends Down
+{
+    /**
+     * Execute the console command.
+     *
+     * Overrides Laravel's DownCommand to use the cache instead of the
+     * filesystem so that maintenance mode is propagated across all
+     * servers and job queues.
+     *
+     * @return mixed
+     */
+    public function handle()
+    {
+        Cache::forever(CacheKeys::MAINTENANCE_PAYLOAD, json_encode($this-&gt;getDownFilePayload()));
+        $this-&gt;comment('Application is now in maintenance mode.');
+    }
+}
+</code></pre>
+
+<p>The <code>$this-&gt;getDownFilePayload</code> serializes the options passed into the Artisan command at runtime and is in the original <code>Down</code> class.</p>
+
+<pre><code class="language-php">/**
+ * Get the payload to be placed in the &quot;down&quot; file.
+ *
+ * @return array
+ */
+protected function getDownFilePayload()
+{
+    return [
+        'time' =&gt; $this-&gt;currentTime(),
+        'message' =&gt; $this-&gt;option('message'),
+        'retry' =&gt; $this-&gt;getRetryTime(),
+    ];
+}
+</code></pre>
+
+<p>If you wish, you can use the <code>retry</code> field to have the cache automatically purge the key/value after the given period of time and take the application out of maintenance mode.</p>
+
+<h4 id="extending-artisan-up">Extending Artisan Up</h4>
+
+<p>Now, extend Laravel&rsquo;s up command to purge the cache key that is being used as a lock, thus taking the application out of maintenance mode.</p>
+
+<pre><code class="language-php">&lt;?php
+
+namespace App\Console\Commands;
+
+use App\Utils\Enums\CacheKeys;
+use Cache;
+use Illuminate\Foundation\Console\UpCommand as Up;
+
+class UpCommand extends Up
+{
+    /**
+     * Execute the console command.
+     *
+     * Overrides Laravel's UpCommand to use the cache instead of the
+     * filesystem so that maintenance mode is propagated across all
+     * servers and job queues.
+     *
+     * @return mixed
+     */
+    public function handle()
+    {
+        Cache::forget(CacheKeys::MAINTENANCE_PAYLOAD);
+        $this-&gt;info('Application is now live.');
+    }
+}
+</code></pre>
+
+<h4 id="register-the-new-commands">Register the New Commands</h4>
+
+<p>Now that we have extended the necessary core Laravel commands, we need to tell the application that when it is bootstrapped, it should use the modified commands instead of the Illuminate commands that ship with the framework.</p>
+
+<p>This can easily be accomplished in the <code>AppServiceProvider</code> boot method.</p>
+
+<pre><code class="language-php">/**
+ * Bootstrap any application services.
+ *
+ * @return void
+ */
+ public function boot()
+ {
+    /**
+     * Override Laravel's &quot;php artisan down&quot; command to put the application in maintenance mode
+     * using our custom Redis based lock.
+     */
+    $this-&gt;app-&gt;extend('command.down', function () {
+        return new DownCommand();
+    });
+
+    /**
+     * Override Laravel's &quot;php artisan up&quot; command to bring the application out of maintenance mode
+     * using our custom Redis based lock.
+     */
+     $this-&gt;app-&gt;extend('command.up', function () {
+        return new UpCommand();
+    });
+}
+</code></pre>
+
+<p>Remember to import the commands.</p>
+
+<pre><code class="language-php">use App\Console\Commands\DownCommand;
+use App\Console\Commands\UpCommand;
+</code></pre>
+
+<p>You will also need to add the commands to the console kernel like you do all other commands.</p>
+
+<pre><code class="language-php">&lt;?php
+
+namespace App\Console;
+
+use App\Console\Commands\DownCommand;
+use App\Console\Commands\UpCommand;
+use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+
+class Kernel extends ConsoleKernel
+{
+    /**
+     * The Artisan commands provided by your application.
+     *
+     * @var array
+     */
+    protected $commands = [
+        DownCommand::class,
+        UpCommand::class,
+    ];
+
+    /**
+     * Register the Closure based commands for the application.
+     *
+     * @return void
+     */
+    protected function commands()
+    {
+        require base_path('routes/console.php');
+    }
+}
+</code></pre>
+
+<h4 id="extend-laravel-s-application-class">Extend Laravel&rsquo;s Application Class</h4>
+
+<p>Now that we are using the cache instead of the filesystem to store the maintenance mode lock, the framework needs to be directed to the new location so that it knows when the application is in maintenance mode.</p>
+
+<p>First, extend the core Application class so that we can override Laravel&rsquo;s <code>isDownForMaintenance</code> method that is currently checking the filesystem for the maintenance lock.</p>
+
+<p>I&rsquo;ve created an <code>App\Extensions\Illuminate\Foundation</code> directory in an attempt to closely mirror the framework.</p>
+
+<pre><code class="language-php">&lt;?php
+
+namespace App\Extensions\Illuminate\Foundation;
+
+use App\Utils\Enums\CacheKeys;
+use Cache;
+use Illuminate\Foundation\Application as App;
+
+class Application extends App
+{
+    /**
+     * Returns whether the application is down for maintenance.
+     *
+     * Laravel maintenance mode is overridden to use the cache instead of the filesystem,
+     * allowing us to treat Redis as a global distributed lock so that
+     * maintenance mode is propagated to multiple servers.
+     *
+     * @return bool Whether the app is in maintenance mod.
+     */
+    public function isDownForMaintenance()
+    {
+        return Cache::has(CacheKeys::MAINTENANCE_PAYLOAD);
+    }
+}
+</code></pre>
+
+<p>This next step that needs to be taken when extending the application is to change how the web application is bootstrapped.</p>
+
+<p>You will find the necessary file to modify in <code>bootstrap/app.php</code>.</p>
+
+<p>The <code>$app</code> variable is now using our extended Application class created above, and thus anytime <code>isDownForMaintenance</code> is called, the cache will be checked for the existence of the maintenance mode lock instead of the storage directory.</p>
+
+<pre><code class="language-php">/*
+|--------------------------------------------------------------------------
+| Create The Application
+|--------------------------------------------------------------------------
+|
+| The first thing we will do is create a new Laravel application instance
+| which serves as the &quot;glue&quot; for all the components of Laravel, and is
+| the IoC container for the system binding all of the various parts.
+|
+*/
+
+$app = new App\Extensions\Illuminate\Foundation\Application(
+    realpath(__DIR__.'/../')
+);
+</code></pre>
+
+<h4 id="extending-maintenance-mode-middleware">Extending Maintenance Mode Middleware</h4>
+
+<p>The final step that needs to be taken is to extend the maintenance mode middleware that ships with the framework.</p>
+
+<p>This middleware is checked every time a request comes into the application. We want it to now query the cache lock that we have created instead of the storage directory.</p>
+
+<pre><code class="language-php">&lt;?php
+
+namespace App\Http\Middleware;
+
+use App\Utils\Enums\CacheKeys;
+use Cache;
+use Closure;
+use Illuminate\Foundation\Http\Exceptions\MaintenanceModeException;
+use Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode as MaintenanceMode;
+
+class CheckForMaintenanceMode extends MaintenanceMode
+{
+
+    /**
+     * Handle an incoming request.
+     *
+     * If the application is in maintenance mode, we retrieve the payload from the cache containing
+     * the user set message and time to display on the error page when the MaintenanceModeException
+     * is thrown.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param \Closure $next
+     * @return mixed
+     */
+    public function handle($request, Closure $next)
+    {
+        if ($this-&gt;app-&gt;isDownForMaintenance()) {
+            $data = json_decode(Cache::get(CacheKeys::MAINTENANCE_PAYLOAD), true);
+
+            throw new MaintenanceModeException($data['time'], $data['retry'], $data['message']);
+        }
+
+        return $next($request);
+    }
+}
+</code></pre>
+
+<p>Laravel uses the <code>\Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode::class</code> in the HTTP kernel global middleware grouping which needs to be replaced with our new custom middleware as such.</p>
+
+<pre><code class="language-php">&lt;?php
+
+use App\Http\Middleware\CheckForMaintenanceMode;
+
+class Kernel extends HttpKernel
+{
+    /**
+     * The application's global HTTP middleware stack.
+     *
+     * These middleware are run during every request to your application.
+     *
+     * @var array
+     */
+    protected $middleware = [
+        \Fideloper\Proxy\TrustProxies::class,
+        CheckForMaintenanceMode::class,
+        \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
+        \App\Http\Middleware\TrimStrings::class,
+    ];
+}
+</code></pre>
+
+<p>You should now be able to call <code>php artisan down</code> and <code>php artisan up</code> to bring the application in and out of maintenance mode!</p>
+
+<h4 id="tests">Tests</h4>
+
+<p>Finally, its always a good idea to write tests for your code so that you can refactor in the future with more confidence.</p>
+
+<p>I tend to write tests as I code, instead of before, to verify that something is working before I go manually test in the browser.</p>
+
+<p>There are a couple different ways you can approach testing this feature.</p>
+
+<p>The first is a straight forward integration test where you put the application into maintenance mode and then assert that the user cannot access the home route. That might look like the following.</p>
+
+<pre><code class="language-php">public function test_home_should_not_be_accessible_in_maintenance_mode()
+{
+    // Arrange
+    Artisan::call('down');
+
+    $user = factory(User::class)-&gt;create();
+
+    // Act &amp;&amp; Assert
+    $this
+        -&gt;actingAs($user)
+        -&gt;get(route('home'))
+        -&gt;assertStatus(503);
+}
+</code></pre>
+
+<p>These next tests are arguably less valuable, but might give you more confidence when working with the codebase in the future.</p>
+
+<pre><code class="language-php">public function test_isDownForMaintenance_returns_true_when_in_maintenance_mode()
+{
+    // Arrange
+    Cache::forever(CacheKeys::MAINTENANCE_PAYLOAD, true);
+
+    // Act &amp;&amp; Assert
+    $this-&gt;assertTrue($this-&gt;app-&gt;isDownForMaintenance());
+}
+
+public function test_isDownForMaintenance_returns_false_when_not_in_maintence_mode()
+{
+    // Arrange
+    Cache::forget(CacheKeys::MAINTENANCE_PAYLOAD);
+
+    // Act &amp;&amp; Assert
+    $this-&gt;assertFalse($this-&gt;app-&gt;isDownForMaintenance());
+}
+</code></pre>
+
+<p>There are many more things you could test. For example, the middleware is passing through to the next middleware in the chain when the application is not in maintenance mode or that the Up and Down commands are setting the appropriate fields in the cache.</p>
+
+<h3 id="production-environment-performance-difference">Production Environment Performance Difference</h3>
+
+<p>Unfortunately, I can&rsquo;t give a true apples to apples comparison as this was not tested in a controlled environment. The deployment of this upgrade also enabled the OPcache. If you aren&rsquo;t already using the OPcache, I highly recommend doing some <a href="https://medium.com/appstract/make-your-laravel-app-fly-with-php-opcache-9948db2a5f93">reading on it</a> and enabling it on your production servers.</p>
+
+<p>That being said, our production servers (m4.large) currently have a latency of around 80ms. Your performance will differ based on where your cache is located, the size of your server, php version, etc&hellip;</p>
+
+<h3 id="what-you-should-be-aware-of">What You Should Be Aware Of</h3>
+
+<p>Finally, be aware that if you are using AWS Elastic Load Balancer with health checks, or a similar service, putting your app into maintenace mode will likely cause your health checks to fail.</p>
+
+<p>You should always dry run these type of changes in a staging environment, which thankfully we did.</p>
+
+<p>Shortly after putting the application into maintenance mode, health checks to our Laravel status endpoints began to return a 503 status code, causing the ELB to take the instances out of the rotation.</p>
+
+<p>In hindsight, this should have been obvious.</p>
+
+<p>A solution is to exempt your status check endpoints from the CheckForMaintenanceMode middleware, which gets run on every request.</p>
+
+<p>To do this, you will want to follow a similar approach to how Laravel&rsquo;s <code>VerifyCsrfToken</code> middleware works.</p>
+
+<pre><code class="language-php">class VerifyCsrfToken
+{
+    /**
+     * The URIs that should be excluded from CSRF verification.
+     *
+     * @var array
+     */
+    protected $except = [];
+
+    /**
+     * Handle an incoming request.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Closure  $next
+     * @return mixed
+     *
+     * @throws \Illuminate\Session\TokenMismatchException
+     */
+    public function handle($request, Closure $next)
+    {
+        if (
+            $this-&gt;isReading($request) ||
+            $this-&gt;runningUnitTests() ||
+            $this-&gt;inExceptArray($request) ||
+            $this-&gt;tokensMatch($request)
+        ) {
+            return $this-&gt;addCookieToResponse($request, $next($request));
+        }
+
+        throw new TokenMismatchException;
+    }
+
+    /**
+     * Determine if the request has a URI that should pass through CSRF verification.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return bool
+     */
+    protected function inExceptArray($request)
+    {
+        foreach ($this-&gt;except as $except) {
+            if ($except !== '/') {
+                $except = trim($except, '/');
+            }
+
+            if ($request-&gt;is($except)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+}
+</code></pre>
+
+<p>Copy the <code>inExceptArray()</code> function to your <code>CheckForMaintenaceMode</code> middleware, which you can then check in the <code>handle()</code> function in a similar fashion to the <code>VerifyCsrfToken</code> middleware above.</p>
+
+<h3 id="conclusion">Conclusion</h3>
+
+<p>We moved from a filesystem based maintenance mode lock to one stored in a Redis cache.</p>
+
+<p>If you aren&rsquo;t using Redis or a distributed cache, you can still follow the approach outlined above, just be aware that maintenance mode won&rsquo;t propogate across all your servers.</p>
+
+<p>Whether you should use this approach, over pointing your load balancer to a static maintenance page, I leave up to you.</p>
+
+                </section>
+            </article>
+
+            
+
+            
+
+            
+
+            <footer id="footer">
+    
+        <div id="social">
+
+	
+	
+    <a class="symbol" href="https://github.com/mraypold/">
+        <i class="fa fa-github"></i>
+    </a>
+    
+    <a class="symbol" href="https://medium.com/@mraypold">
+        <i class="fa fa-medium"></i>
+    </a>
+    
+
+
+</div>
+
+    
+    <p class="small">
+    
+       © Copyright 2019 <i class="fa fa-heart" aria-hidden="true"></i> 
+    
+    </p>
+    <p class="small">
+        Powered by <a href="http://www.gohugo.io/">Hugo</a> Theme By <a href="https://github.com/nodejh/hugo-theme-cactus-plus">nodejh</a>
+    </p>
+</footer>
+
+        </section>
+
+        <script src="/js/jquery-3.3.1.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+
+
+    </body>
+</html>

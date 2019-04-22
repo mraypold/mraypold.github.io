@@ -15,7 +15,7 @@
   </url>
   
   <url>
-    <loc>/post/laravel-queues-in-production/</loc>
+    <loc>/posts/laravel-queues-in-production/</loc>
     <lastmod>2019-04-20T16:58:21-07:00</lastmod>
   </url>
   
@@ -26,7 +26,7 @@
   </url>
   
   <url>
-    <loc>/post/</loc>
+    <loc>/posts/</loc>
     <lastmod>2019-04-20T16:58:21-07:00</lastmod>
     <priority>0</priority>
   </url>
@@ -62,7 +62,7 @@
   </url>
   
   <url>
-    <loc>/post/opportunity-cost-in-startups/</loc>
+    <loc>/posts/opportunity-cost-in-startups/</loc>
     <lastmod>2018-12-15T09:12:04-08:00</lastmod>
   </url>
   
@@ -73,7 +73,7 @@
   </url>
   
   <url>
-    <loc>/post/laravel-distributed-maintenance-mode/</loc>
+    <loc>/posts/laravel-distributed-maintenance-mode/</loc>
     <lastmod>2017-10-07T06:50:24-07:00</lastmod>
   </url>
   
