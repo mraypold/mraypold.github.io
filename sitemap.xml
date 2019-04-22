@@ -3,27 +3,43 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>/post/opportunity-cost-in-startups/</loc>
-    <lastmod>2018-12-15T09:12:04-08:00</lastmod>
+    <loc>/tags/devops/</loc>
+    <lastmod>2019-04-20T16:58:21-07:00</lastmod>
+    <priority>0</priority>
   </url>
   
   <url>
-    <loc>/post/laravel-distributed-maintenance-mode/</loc>
-    <lastmod>2017-10-07T06:50:24-07:00</lastmod>
+    <loc>/tags/laravel/</loc>
+    <lastmod>2019-04-20T16:58:21-07:00</lastmod>
+    <priority>0</priority>
   </url>
   
   <url>
-    <loc>/about/</loc>
-    <lastmod>2017-10-07T06:50:12-07:00</lastmod>
+    <loc>/post/laravel-queues-in-production/</loc>
+    <lastmod>2019-04-20T16:58:21-07:00</lastmod>
   </url>
   
   <url>
-    <loc>/tags/</loc>
-    <lastmod>2017-10-07T06:50:12-07:00</lastmod>
+    <loc>/</loc>
+    <lastmod>2019-04-20T16:58:21-07:00</lastmod>
+    <priority>0</priority>
   </url>
   
   <url>
-    <loc>/categories/</loc>
+    <loc>/post/</loc>
+    <lastmod>2019-04-20T16:58:21-07:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/queues/</loc>
+    <lastmod>2019-04-20T16:58:21-07:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/redis/</loc>
+    <lastmod>2019-04-20T16:58:21-07:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -40,15 +56,25 @@
   </url>
   
   <url>
-    <loc>/tags/laravel/</loc>
-    <lastmod>2017-10-07T06:50:24-07:00</lastmod>
+    <loc>/tags/software-development/</loc>
+    <lastmod>2018-12-15T09:12:04-08:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>/</loc>
+    <loc>/post/opportunity-cost-in-startups/</loc>
+    <lastmod>2018-12-15T09:12:04-08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/startup/</loc>
     <lastmod>2018-12-15T09:12:04-08:00</lastmod>
     <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/post/laravel-distributed-maintenance-mode/</loc>
+    <lastmod>2017-10-07T06:50:24-07:00</lastmod>
   </url>
   
   <url>
@@ -58,26 +84,17 @@
   </url>
   
   <url>
-    <loc>/post/</loc>
-    <lastmod>2018-12-15T09:12:04-08:00</lastmod>
-    <priority>0</priority>
+    <loc>/about/</loc>
+    <lastmod>2017-10-07T06:50:12-07:00</lastmod>
   </url>
   
   <url>
-    <loc>/tags/redis/</loc>
-    <lastmod>2017-10-07T06:50:24-07:00</lastmod>
-    <priority>0</priority>
+    <loc>/tags/</loc>
+    <lastmod>2017-10-07T06:50:12-07:00</lastmod>
   </url>
   
   <url>
-    <loc>/tags/software-development/</loc>
-    <lastmod>2018-12-15T09:12:04-08:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/startup/</loc>
-    <lastmod>2018-12-15T09:12:04-08:00</lastmod>
+    <loc>/categories/</loc>
     <priority>0</priority>
   </url>
   

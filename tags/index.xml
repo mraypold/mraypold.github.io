@@ -12,6 +12,42 @@
     
     
     <item>
+      <title>DevOps</title>
+      <link>/tags/devops/</link>
+      <pubDate>Sat, 20 Apr 2019 16:58:21 -0700</pubDate>
+      
+      <guid>/tags/devops/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Laravel</title>
+      <link>/tags/laravel/</link>
+      <pubDate>Sat, 20 Apr 2019 16:58:21 -0700</pubDate>
+      
+      <guid>/tags/laravel/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Queues</title>
+      <link>/tags/queues/</link>
+      <pubDate>Sat, 20 Apr 2019 16:58:21 -0700</pubDate>
+      
+      <guid>/tags/queues/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Redis</title>
+      <link>/tags/redis/</link>
+      <pubDate>Sat, 20 Apr 2019 16:58:21 -0700</pubDate>
+      
+      <guid>/tags/redis/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Economics</title>
       <link>/tags/economics/</link>
       <pubDate>Sat, 15 Dec 2018 09:12:04 -0800</pubDate>
@@ -30,33 +66,6 @@
     </item>
     
     <item>
-      <title>Laravel</title>
-      <link>/tags/laravel/</link>
-      <pubDate>Sat, 07 Oct 2017 06:50:24 -0700</pubDate>
-      
-      <guid>/tags/laravel/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Php</title>
-      <link>/tags/php/</link>
-      <pubDate>Sat, 07 Oct 2017 06:50:24 -0700</pubDate>
-      
-      <guid>/tags/php/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Redis</title>
-      <link>/tags/redis/</link>
-      <pubDate>Sat, 07 Oct 2017 06:50:24 -0700</pubDate>
-      
-      <guid>/tags/redis/</guid>
-      <description></description>
-    </item>
-    
-    <item>
       <title>Software Development</title>
       <link>/tags/software-development/</link>
       <pubDate>Sat, 15 Dec 2018 09:12:04 -0800</pubDate>
@@ -71,6 +80,15 @@
       <pubDate>Sat, 15 Dec 2018 09:12:04 -0800</pubDate>
       
       <guid>/tags/startup/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>PHP</title>
+      <link>/tags/php/</link>
+      <pubDate>Sat, 07 Oct 2017 06:50:24 -0700</pubDate>
+      
+      <guid>/tags/php/</guid>
       <description></description>
     </item>
     
