@@ -1,311 +1,486 @@
 <!DOCTYPE html>
 <html lang="en-us">
-	<head>
-		<meta charset="utf-8">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-		
-		
-		
-		<meta name="generator" content="Hugo 0.55.3" />
-		<title>Laravel Queues in Production &middot; Michael Raypold</title>
-		<link rel="shortcut icon" href="/images/favicon.ico">
-		<link rel="stylesheet" href="/css/style.css">
-		<link rel="stylesheet" href="/css/highlight.css">
+<head>
+  <link rel="preload" href="/lib/font-awesome/webfonts/fa-brands-400.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="/lib/font-awesome/webfonts/fa-regular-400.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="/lib/font-awesome/webfonts/fa-solid-900.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="/lib/JetBrainsMono/web/woff2/JetBrainsMono-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title> Laravel Queues in Production | Michael Raypold</title>
+  <link rel = 'canonical' href = '/posts/laravel-queues-in-production/'>
+  <meta name="description" content="Thoughts of Michael Raypold. The wonderful Hugo theme has been developed by [monkeyWzr](https://github.com/monkeyWzr/).">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="all,follow">
+  <meta name="googlebot" content="index,follow,snippet,archive">
+  <meta property="og:title" content="Laravel Queues in Production" />
+<meta property="og:description" content="The Laravel queue and event system is one of the most powerful features of the framework and indispensable if you want to build a modern web application.
+The queue provides a performant means to run background tasks that don’t block your HTTP lifecycle, allowing you to serve up a responsive application to your customers. Typically, you would use the queue to send emails, collect metrics or generate reports, amongst a number of other tasks that are either time consuming, prone to failure or can be done in an asynchronous manner that don’t impede the user’s workflow." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/posts/laravel-queues-in-production/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2019-04-20T16:58:21-07:00" />
+<meta property="article:modified_time" content="2019-04-20T16:58:21-07:00" />
 
-		
-		<link rel="stylesheet" href="/css/font-awesome.min.css">
-		
 
-		
+  <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Laravel Queues in Production"/>
+<meta name="twitter:description" content="The Laravel queue and event system is one of the most powerful features of the framework and indispensable if you want to build a modern web application.
+The queue provides a performant means to run background tasks that don’t block your HTTP lifecycle, allowing you to serve up a responsive application to your customers. Typically, you would use the queue to send emails, collect metrics or generate reports, amongst a number of other tasks that are either time consuming, prone to failure or can be done in an asynchronous manner that don’t impede the user’s workflow."/>
 
-		
-	</head>
+  
+  
+    
+  
+  
+  <link rel="stylesheet" href="/css/styles.94f653e9e151e28067a7c5dbbc4600cbd5a3c721e79faaf971e523c40f3b249b8e4f20bb57810dfffa8d559ca5c140fd56eb4cd9c0853113ad08e66afdb08bdd.css" integrity="sha512-lPZT6eFR4oBnp8XbvEYAy9WjxyHnn6r5ceUjxA87JJuOTyC7V4EN//qNVZylwUD9VutM2cCFMROtCOZq/bCL3Q=="> 
 
-    <body>
-       <nav class="main-nav">
-	
-	
-		<a href='/'> <span class="arrow">←</span>Home</a>
-	
-	<a href='/posts'>Archive</a>
-	<a href='/tags'>Tags</a>
-	<a href='/about'>About</a>
+  
+  
+  
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  
 
-	
+  
+<link rel="icon" type="image/png" href="/images/favicon.ico" />
 
-	
+  
+  
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+  <div class="content index py4">
+
+  <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;" aria-label="Top of Page"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+        <li><a href="/">Home</a></li>
+         
+        <li><a href="/posts">All posts</a></li>
+         
+        <li><a href="/tags">Tags</a></li>
+         
+        <li><a href="/about">About</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li>
+          <a class="icon" href=" /posts/laravel-distributed-maintenance-mode/" aria-label="Previous">
+            <i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i>
+          </a>
+        </li>
+        
+        
+        <li>
+          <a class="icon" href="/posts/influential-books/" aria-label="Next">
+            <i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i>
+          </a>
+        </li>
+        
+        <li>
+          <a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" aria-label="Top of Page">
+            <i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i>
+          </a>
+        </li>
+        <li>
+          <a class="icon" href="#" aria-label="Share">
+            <i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i>
+          </a>
+        </li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      
+      <ul>
+  
+  
+    
+  
+  
+  <li>
+    <a class="icon" href="http://www.facebook.com/sharer.php?u=%2fposts%2flaravel-queues-in-production%2f" aria-label="Facebook">
+      <i class="fab fa-facebook " aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="https://twitter.com/share?url=%2fposts%2flaravel-queues-in-production%2f&text=Laravel%20Queues%20in%20Production" aria-label="Twitter">
+      <i class="fab fa-twitter " aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="http://www.linkedin.com/shareArticle?url=%2fposts%2flaravel-queues-in-production%2f&title=Laravel%20Queues%20in%20Production" aria-label="Linkedin">
+      <i class="fab fa-linkedin " aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=%2fposts%2flaravel-queues-in-production%2f&is_video=false&description=Laravel%20Queues%20in%20Production" aria-label="Pinterest">
+      <i class="fab fa-pinterest " aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="mailto:?subject=Laravel%20Queues%20in%20Production&body=Check out this article: %2fposts%2flaravel-queues-in-production%2f" aria-label="Email">
+      <i class="fas fa-envelope " aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="https://getpocket.com/save?url=%2fposts%2flaravel-queues-in-production%2f&title=Laravel%20Queues%20in%20Production" aria-label="Pocket">
+      <i class="fab fa-get-pocket " aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="http://reddit.com/submit?url=%2fposts%2flaravel-queues-in-production%2f&title=Laravel%20Queues%20in%20Production" aria-label="reddit">
+      <i class="fab fa-reddit " aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="http://www.tumblr.com/share/link?url=%2fposts%2flaravel-queues-in-production%2f&name=Laravel%20Queues%20in%20Production&description=The%20Laravel%20queue%20and%20event%20system%20is%20one%20of%20the%20most%20powerful%20features%20of%20the%20framework%20and%20indispensable%20if%20you%20want%20to%20build%20a%20modern%20web%20application.%0aThe%20queue%20provides%20a%20performant%20means%20to%20run%20background%20tasks%20that%20don%e2%80%99t%20block%20your%20HTTP%20lifecycle%2c%20allowing%20you%20to%20serve%20up%20a%20responsive%20application%20to%20your%20customers.%20Typically%2c%20you%20would%20use%20the%20queue%20to%20send%20emails%2c%20collect%20metrics%20or%20generate%20reports%2c%20amongst%20a%20number%20of%20other%20tasks%20that%20are%20either%20time%20consuming%2c%20prone%20to%20failure%20or%20can%20be%20done%20in%20an%20asynchronous%20manner%20that%20don%e2%80%99t%20impede%20the%20user%e2%80%99s%20workflow." aria-label="Tumblr">
+      <i class="fab fa-tumblr " aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="https://news.ycombinator.com/submitlink?u=%2fposts%2flaravel-queues-in-production%2f&t=Laravel%20Queues%20in%20Production" aria-label="Hacker News">
+      <i class="fab fa-hacker-news " aria-hidden="true"></i>
+    </a>
+  </li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <nav id="TableOfContents">
+  <ul>
+    <li><a href="#use-multiple-queues-and-prioritize-them">Use Multiple Queues and Prioritize Them</a></li>
+    <li><a href="#starvation">Starvation</a></li>
+    <li><a href="#supervisor">Supervisor</a></li>
+    <li><a href="#docker">Docker</a></li>
+    <li><a href="#sharing-cache-and-queue-instances-dont">Sharing Cache and Queue Instances (Don’t)</a></li>
+    <li><a href="#config-changes">Config Changes</a></li>
+    <li><a href="#logging">Logging</a></li>
+    <li><a href="#conclusion">Conclusion</a></li>
+  </ul>
 </nav>
+    </div>
+  </span>
+</div>
 
 
-        <section id="wrapper" class="post">
-            <article>
-                <header>
-                    <h1>
-                        Laravel Queues in Production
-                    </h1>
-                    <h2 class="headline">
-                    Apr 20, 2019 16:58
-                    · 1402 words
-                    · 7 minute read
-                      <span class="tags">
-                      
-                      
-                          
-                              <a href="/tags/laravel">Laravel</a>
-                          
-                              <a href="/tags/redis">Redis</a>
-                          
-                              <a href="/tags/queues">Queues</a>
-                          
-                              <a href="/tags/devops">DevOps</a>
-                          
-                      
-                      
-                      </span>
-                    </h2>
-                </header>
-                
-                <section id="post-body">
-                    
+  <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+    <header>
+      <h1 class="posttitle" itemprop="name headline">
+        Laravel Queues in Production
+      </h1>
+      <div class="meta">
+        
+        <div class="postdate">
+          
+          <time datetime="2019-04-20 16:58:21 -0700 PDT" itemprop="datePublished">2019-04-20</time>
+          
+        </div>
+        
+        
+        
+        
+        <div class="article-tag">
+            <i class="fas fa-tag"></i>
+            
+            
+            <a class="tag-link" href="/tags/laravel" rel="tag">Laravel</a>
+            
+             ,  
+            <a class="tag-link" href="/tags/redis" rel="tag">Redis</a>
+            
+             ,  
+            <a class="tag-link" href="/tags/queues" rel="tag">Queues</a>
+            
+             ,  
+            <a class="tag-link" href="/tags/devops" rel="tag">DevOps</a>
+            
+        </div>
+        
+      </div>
+    </header>
 
-<p>The Laravel queue and event system is one of the most powerful features of the framework and indispensable if you want to build a modern web application.</p>
-
+  
+    <div class="content" itemprop="articleBody">
+      <p>The Laravel queue and event system is one of the most powerful features of the framework and indispensable if you want to build a modern web application.</p>
 <p>The queue provides a performant means to run background tasks that don’t block your HTTP lifecycle, allowing you to serve up a responsive application to your customers. Typically, you would use the queue to send emails, collect metrics or generate reports, amongst a number of other tasks that are either time consuming, prone to failure or can be done in an asynchronous manner that don’t impede the user’s workflow.</p>
-
 <p>Having now used the Laravel event system to queue up listeners as well as background jobs for the last few years, I’ve written up some gotchas and best practices for others to learn from.</p>
-
 <h2 id="use-multiple-queues-and-prioritize-them">Use Multiple Queues and Prioritize Them</h2>
-
 <p>By default, Laravel assigns all jobs and event listeners to the <code>default</code> queue. This is typically fine for a low volume web application and quick jobs or event listeners.</p>
-
 <p>However, sometimes you will need to prioritize jobs on the queue so that they are executed before others.</p>
-
 <p>As an example, let’s consider a project planning board like Jira or Asana. When a user is logged into the application, we want to push events down the websocket using the queue. Similarly, the queue is also used to send emails to notify users of changes to the project card/issue.</p>
-
 <p>In the above example, the websocket queue should take priority over emails, as the user is currently logged into the application and would like real time updates while they are interacting with the project planning board, instead of jumping back and forth between their email client to find out every time a co-worker has made an edit or an update.</p>
-
 <p>There are a couple ways to accomplish this in Laravel. You can dispatch the job like so</p>
-
-<pre><code class="language-php">WebsocketMessenger::dispatch()-&gt;onQueue(‘websocket’);
-</code></pre>
-
-<p>Or update the class itself with a ‘queue’ variable.</p>
-
-<pre><code class="language-php">class WebsocketMessenger implements ShouldQueue
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php"><span style="color:#a6e22e">WebsocketMessenger</span><span style="color:#f92672">::</span><span style="color:#a6e22e">dispatch</span>()<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">onQueue</span>(<span style="color:#a6e22e">‘websocket’</span>);
+</code></pre></div><p>Or update the class itself with a ‘queue’ variable.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">WebsocketMessenger</span> <span style="color:#66d9ef">implements</span> <span style="color:#a6e22e">ShouldQueue</span>
 {
 
-    /**
-     * The name of the queue the job should be sent to.
-     *
-     * @var string|null
-     */
-    public $queue = 'websocket';
+    <span style="color:#e6db74">/**
+</span><span style="color:#e6db74">     * The name of the queue the job should be sent to.
+</span><span style="color:#e6db74">     *
+</span><span style="color:#e6db74">     * @var string|null
+</span><span style="color:#e6db74">     */</span>
+    <span style="color:#66d9ef">public</span> $queue <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;websocket&#39;</span>;
 }
-</code></pre>
-
-<p>I would strongly recommend using enums for both of the above examples so that you can easily rename queues in the future with a single line change.</p>
-
-<pre><code class="language-php">/**
- * Class Queues
- *
- * References which queue a queueable a class belongs on.
- *
- * @package App\Utils\Enums
- */
-abstract class Queues
+</code></pre></div><p>I would strongly recommend using enums for both of the above examples so that you can easily rename queues in the future with a single line change.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php"><span style="color:#e6db74">/**
+</span><span style="color:#e6db74"> * Class Queues
+</span><span style="color:#e6db74"> *
+</span><span style="color:#e6db74"> * References which queue a queueable a class belongs on.
+</span><span style="color:#e6db74"> *
+</span><span style="color:#e6db74"> * @package App\Utils\Enums
+</span><span style="color:#e6db74"> */</span>
+<span style="color:#66d9ef">abstract</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Queues</span>
 {
- 
-    /**
-     * The queue for websocket events/jobs.
-     
-     * @var string
-     */
-    const WEBSOCKET = 'websocket';
+
+    <span style="color:#e6db74">/**
+</span><span style="color:#e6db74">     * The queue for websocket events/jobs.
+</span><span style="color:#e6db74">
+</span><span style="color:#e6db74">     * @var string
+</span><span style="color:#e6db74">     */</span>
+    <span style="color:#66d9ef">const</span> <span style="color:#66d9ef">WEBSOCKET</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;websocket&#39;</span>;
 }
-</code></pre>
-
-<pre><code class="language-php">WebsocketMessenger::dispatch()-&gt;onQueue(Queues::WEBSOCKET);
-</code></pre>
-
-<p>You then prioritize the queue:work command like so.</p>
-
-<pre><code class="language-bash">php artisan queue:work --queue=websocket,email,default
-</code></pre>
-
-<p>The queue will process everything in the websocket queue before attempting to process the email queue and finally anything on the default queue.</p>
-
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php"><span style="color:#a6e22e">WebsocketMessenger</span><span style="color:#f92672">::</span><span style="color:#a6e22e">dispatch</span>()<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">onQueue</span>(<span style="color:#a6e22e">Queues</span><span style="color:#f92672">::</span><span style="color:#a6e22e">WEBSOCKET</span>);
+</code></pre></div><p>You then prioritize the queue:work command like so.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">php artisan queue:work --queue<span style="color:#f92672">=</span>websocket,email,default
+</code></pre></div><p>The queue will process everything in the websocket queue before attempting to process the email queue and finally anything on the default queue.</p>
 <h2 id="starvation">Starvation</h2>
-
 <p>The above code example has a potential problem with <a href="https://en.wikipedia.org/wiki/Starvation_(computer_science)">resource starvation</a> if your websocket queue is always processing events/jobs, preventing the emails from ever sending because it cannot get a free executor slot.</p>
-
 <p>This can be difficult to spot in production without correct monitoring and may take the form of your Redis instance eventually exhausting all memory and throwing an error in your logs like follows.</p>
-
-<pre><code class="language-bash">Laravel-queue-worker INFO   OOM command not allowed when used memory &gt; 'maxmemory'.
-</code></pre>
-
-<p>As an aside, if you don’t have production alarms set up for Redis memory utilization, you should.</p>
-
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">Laravel-queue-worker INFO   OOM command not allowed when used memory &gt; <span style="color:#e6db74">&#39;maxmemory&#39;</span>.
+</code></pre></div><p>As an aside, if you don’t have production alarms set up for Redis memory utilization, you should.</p>
 <p>If you chose not to use <a href="https://laravel.com/docs/5.8/horizon">Laravel Horizon</a>, which will prevent the starvation problem, or some other appropriate solution that will automatically scale your queue runners based on queue size, you can work around this problem through editing your supervisor config like follows to guarantee there is always at least one exectuor running for each queue.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#f92672">[</span>program:laravel-worker-queue<span style="color:#f92672">]</span>
+process_name<span style="color:#f92672">=</span>%<span style="color:#f92672">(</span>program_name<span style="color:#f92672">)</span>s_%<span style="color:#f92672">(</span>process_num<span style="color:#f92672">)</span>02d
+command<span style="color:#f92672">=</span>php artisan queue:work --queue<span style="color:#f92672">=</span>websocket,email,default --daemon
+numprocs<span style="color:#f92672">=</span><span style="color:#ae81ff">4</span>
 
-<pre><code class="language-bash">[program:laravel-worker-queue]
-process_name=%(program_name)s_%(process_num)02d
-command=php artisan queue:work --queue=websocket,email,default --daemon
-numprocs=4
+<span style="color:#f92672">[</span>program:laravel-worker-websocket<span style="color:#f92672">]</span>
+process_name<span style="color:#f92672">=</span>%<span style="color:#f92672">(</span>program_name<span style="color:#f92672">)</span>s_%<span style="color:#f92672">(</span>process_num<span style="color:#f92672">)</span>02d
+command<span style="color:#f92672">=</span>php artisan queue:work --queue<span style="color:#f92672">=</span>websocket --daemon
+numprocs<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>
 
-[program:laravel-worker-websocket]
-process_name=%(program_name)s_%(process_num)02d
-command=php artisan queue:work --queue=websocket --daemon
-numprocs=1
+<span style="color:#f92672">[</span>program:laravel-worker-email<span style="color:#f92672">]</span>
+process_name<span style="color:#f92672">=</span>%<span style="color:#f92672">(</span>program_name<span style="color:#f92672">)</span>s_%<span style="color:#f92672">(</span>process_num<span style="color:#f92672">)</span>02d
+command<span style="color:#f92672">=</span>php artisan queue:work --queue<span style="color:#f92672">=</span>email --daemon
+numprocs<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>
 
-[program:laravel-worker-email]
-process_name=%(program_name)s_%(process_num)02d
-command=php artisan queue:work --queue=email --daemon
-numprocs=1
-
-[program:laravel-worker-default]
-process_name=%(program_name)s_%(process_num)02d
-command=php artisan queue:work --queue=default --daemon
-numprocs=1
-</code></pre>
-
-<p>I&rsquo;ve ignored additional configuration parameters in the supervisor config as those will be specific to your system.</p>
-
+<span style="color:#f92672">[</span>program:laravel-worker-default<span style="color:#f92672">]</span>
+process_name<span style="color:#f92672">=</span>%<span style="color:#f92672">(</span>program_name<span style="color:#f92672">)</span>s_%<span style="color:#f92672">(</span>process_num<span style="color:#f92672">)</span>02d
+command<span style="color:#f92672">=</span>php artisan queue:work --queue<span style="color:#f92672">=</span>default --daemon
+numprocs<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>
+</code></pre></div><p>I&rsquo;ve ignored additional configuration parameters in the supervisor config as those will be specific to your system.</p>
 <h2 id="supervisor">Supervisor</h2>
-
 <p>If you are using supervisor to wrap <code>php artisan queue:work</code>, as suggested in the <a href="https://laravel.com/docs/5.8/queues#supervisor-configuration">Laravel documentation</a>, you need to be careful to monitor your production system for supervisor failures.</p>
-
 <p>A simple way to do this is to have your logging services send out a notification anytime it finds a string like <code>gave up</code> or <code>entered FATAL state, too many start retries too quickly</code>.</p>
-
 <p>Failure to catch this error can result in your job queue not being processed.</p>
-
 <p>Admittedly this is an exceptionally rare occurrence, but I’ve seen it happen when our multi availability zone database had to swap over from one zone to the other, resulting in all Laravel database connections being dropped for a couple seconds. During these few seconds, supervisor attempted to restart the process and eventually gave up. The database was offline for less than 5 seconds, an almost inconsequential amount of time, but we didn’t detect the supervisor issues for another couple hours due to poor job queue telemetry (since rectified).</p>
-
 <p>To save yourself a similar headache, you can wrap your job queue in a bash script that delays the restarts.</p>
-
 <h2 id="docker">Docker</h2>
-
 <p>It might be tempting to install supervisor within your docker image and have it manage the Laravel queue.</p>
-
 <p>Don’t do that.</p>
-
 <p>Docker works best when it runs a single isolated process. It&rsquo;s much more difficult to catch misbehaving supervisor process that fan out multiple queue workers when they are within a docker container.</p>
-
 <p>Your container orchestration system will bring the container back up if the queue runner exits, and you have the added benefit of being able to precisely specify the memory and CPU allocation for each job queue process within Kubernetes to better solve the <a href="https://en.wikipedia.org/wiki/Bin_packing_problem">bin packing problem</a>.</p>
-
 <p>Instead of using supervisor, you are better off setting up a CMD instruction in your Dockerfile like follows.</p>
-
-<pre><code class="language-dockerfile">CMD php artisan queue:work --queue=default --sleep=1 --tries=5 –daemon
-</code></pre>
-
-<p>Furthermore, I would strongly recommend doing some profiling on your jobs so you can better set memory and CPU limits on your kubernetes resources.</p>
-
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-dockerfile" data-lang="dockerfile"><span style="color:#66d9ef">CMD</span> php artisan queue:work --queue<span style="color:#f92672">=</span>default --sleep<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span> --tries<span style="color:#f92672">=</span><span style="color:#ae81ff">5</span> –daemon<span style="color:#960050;background-color:#1e0010">
+</span></code></pre></div><p>Furthermore, I would strongly recommend doing some profiling on your jobs so you can better set memory and CPU limits on your kubernetes resources.</p>
 <p>Having statsd collect <code>memory_get_peak_usage(true)</code> over time will allow you make better utilization of your server resources.</p>
-
-<h2 id="sharing-cache-and-queue-instances-don-t">Sharing Cache and Queue Instances (Don’t)</h2>
-
+<h2 id="sharing-cache-and-queue-instances-dont">Sharing Cache and Queue Instances (Don’t)</h2>
 <p>If you are using Redis for both your cache and queue, you should run them on separate connections and instances.</p>
-
 <p>The first reason is partially outlined above. If you get into a scenario where you have process starvation on the job queue, you may run out of Redis memory, causing both the cache and queue to become inoperable.</p>
-
 <p>The second reason is that for some unforeseen reason, you may one day need to flush your application cache. Perhaps there are some keys that are not expiring which are causing issues, or you have a bug in your code which is causing extreme writes to the cache. You can now safely flush the cache without losing unprocessed jobs.</p>
-
 <p>In short, you will get better isolation and performance.</p>
-
 <h2 id="config-changes">Config Changes</h2>
-
 <p>If you are running a multi-tenant system, you might be dynamically loading different config values within the job queue classes that you are currently executing.</p>
-
 <p>This can be a huge source of unexpected bugs because Laravel wont reboot the framework while running the queue in <code>--daemon</code> mode, thus not resetting the config to the default configured values like would occur during a normal HTTP request/response lifecycle.</p>
-
 <p>You have two solutions here:</p>
-
 <ol>
 <li>Manually reset the config before the job ends. However you have to be careful about exceptions being thrown prior to the &ldquo;reset&rdquo;, thus never hitting your reset block and causing further state issues.</li>
 <li>Don&rsquo;t run the queue in <code>--daemon</code> mode which incurs a performance hit.</li>
 </ol>
-
 <h2 id="logging">Logging</h2>
-
 <p>Here is a simple hack that I find makes it easier to debug system issues.</p>
-
 <p>Laravel by default will store failed jobs in the database, however you may find it easier to dig through the logs for this information, so you can place the following code in your AppServiceProvider.</p>
-
-<pre><code class="language-php">/**
- * Log failed queue events so that we have more system visibility.
- *
- * @link https://laravel.com/docs/5.8/queues#dealing-with-failed-jobs
- */
-Queue::failing(function (JobFailed $event) {
-    \Log::error('Queue Failure', [
-        'connectionName' =&gt; $event-&gt;connectionName,
-        'queue' =&gt; $event-&gt;job-&gt;getQueue(),
-        'exceptionMessage' =&gt; $event-&gt;exception-&gt;getMessage(),
-        'exception' =&gt; $event-&gt;exception-&gt;getTrace(),
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php"><span style="color:#e6db74">/**
+</span><span style="color:#e6db74"> * Log failed queue events so that we have more system visibility.
+</span><span style="color:#e6db74"> *
+</span><span style="color:#e6db74"> * @link https://laravel.com/docs/5.8/queues#dealing-with-failed-jobs
+</span><span style="color:#e6db74"> */</span>
+<span style="color:#a6e22e">Queue</span><span style="color:#f92672">::</span><span style="color:#a6e22e">failing</span>(<span style="color:#66d9ef">function</span> (<span style="color:#a6e22e">JobFailed</span> $event) {
+    <span style="color:#a6e22e">\Log</span><span style="color:#f92672">::</span><span style="color:#a6e22e">error</span>(<span style="color:#e6db74">&#39;Queue Failure&#39;</span>, [
+        <span style="color:#e6db74">&#39;connectionName&#39;</span> <span style="color:#f92672">=&gt;</span> $event<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">connectionName</span>,
+        <span style="color:#e6db74">&#39;queue&#39;</span> <span style="color:#f92672">=&gt;</span> $event<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">job</span><span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">getQueue</span>(),
+        <span style="color:#e6db74">&#39;exceptionMessage&#39;</span> <span style="color:#f92672">=&gt;</span> $event<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">exception</span><span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">getMessage</span>(),
+        <span style="color:#e6db74">&#39;exception&#39;</span> <span style="color:#f92672">=&gt;</span> $event<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">exception</span><span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">getTrace</span>(),
     ]);
 });
-</code></pre>
-
-<p>Be careful about logging personally identifiable information with the above solution; especially if you are forwarding your logs to an external logging provider.</p>
-
+</code></pre></div><p>Be careful about logging personally identifiable information with the above solution; especially if you are forwarding your logs to an external logging provider.</p>
 <h2 id="conclusion">Conclusion</h2>
-
 <p>I would encourage everyone to give the <a href="https://laravel.com/docs/5.8/queues">Laravel Queue</a> and <a href="https://laravel.com/docs/5.8/horizon">Horizon</a> documentation a thorough read.</p>
-
 <p>The queue system is surprisingly powerful and can be used in <a href="https://twitter.com/rongonzalezlobo/status/1109191497587449856?s=19">high throughput environments</a>.</p>
-
 <p>Reach out if you have any questions.</p>
 
-                </section>
-            </article>
+    </div>
+  </article>
 
-            
+  
+  
 
-            
 
-            
 
-            <footer id="footer">
+
+
+  <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/posts">All posts</a></li>
+         
+          <li><a href="/tags">Tags</a></li>
+         
+          <li><a href="/about">About</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <nav id="TableOfContents">
+  <ul>
+    <li><a href="#use-multiple-queues-and-prioritize-them">Use Multiple Queues and Prioritize Them</a></li>
+    <li><a href="#starvation">Starvation</a></li>
+    <li><a href="#supervisor">Supervisor</a></li>
+    <li><a href="#docker">Docker</a></li>
+    <li><a href="#sharing-cache-and-queue-instances-dont">Sharing Cache and Queue Instances (Don’t)</a></li>
+    <li><a href="#config-changes">Config Changes</a></li>
+    <li><a href="#logging">Logging</a></li>
+    <li><a href="#conclusion">Conclusion</a></li>
+  </ul>
+</nav>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      
+      <ul>
+  
+  
     
-        <div id="social">
-
-	
-	
-    <a class="symbol" href="https://github.com/mraypold/">
-        <i class="fa fa-github"></i>
+  
+  
+  <li>
+    <a class="icon" href="http://www.facebook.com/sharer.php?u=%2fposts%2flaravel-queues-in-production%2f" aria-label="Facebook">
+      <i class="fab fa-facebook fa-lg" aria-hidden="true"></i>
     </a>
-    
-    <a class="symbol" href="https://medium.com/@mraypold">
-        <i class="fa fa-medium"></i>
+  </li>
+  <li>
+    <a class="icon" href="https://twitter.com/share?url=%2fposts%2flaravel-queues-in-production%2f&text=Laravel%20Queues%20in%20Production" aria-label="Twitter">
+      <i class="fab fa-twitter fa-lg" aria-hidden="true"></i>
     </a>
-    
+  </li>
+  <li>
+    <a class="icon" href="http://www.linkedin.com/shareArticle?url=%2fposts%2flaravel-queues-in-production%2f&title=Laravel%20Queues%20in%20Production" aria-label="Linkedin">
+      <i class="fab fa-linkedin fa-lg" aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=%2fposts%2flaravel-queues-in-production%2f&is_video=false&description=Laravel%20Queues%20in%20Production" aria-label="Pinterest">
+      <i class="fab fa-pinterest fa-lg" aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="mailto:?subject=Laravel%20Queues%20in%20Production&body=Check out this article: %2fposts%2flaravel-queues-in-production%2f" aria-label="Email">
+      <i class="fas fa-envelope fa-lg" aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="https://getpocket.com/save?url=%2fposts%2flaravel-queues-in-production%2f&title=Laravel%20Queues%20in%20Production" aria-label="Pocket">
+      <i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="http://reddit.com/submit?url=%2fposts%2flaravel-queues-in-production%2f&title=Laravel%20Queues%20in%20Production" aria-label="reddit">
+      <i class="fab fa-reddit fa-lg" aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="http://www.tumblr.com/share/link?url=%2fposts%2flaravel-queues-in-production%2f&name=Laravel%20Queues%20in%20Production&description=The%20Laravel%20queue%20and%20event%20system%20is%20one%20of%20the%20most%20powerful%20features%20of%20the%20framework%20and%20indispensable%20if%20you%20want%20to%20build%20a%20modern%20web%20application.%0aThe%20queue%20provides%20a%20performant%20means%20to%20run%20background%20tasks%20that%20don%e2%80%99t%20block%20your%20HTTP%20lifecycle%2c%20allowing%20you%20to%20serve%20up%20a%20responsive%20application%20to%20your%20customers.%20Typically%2c%20you%20would%20use%20the%20queue%20to%20send%20emails%2c%20collect%20metrics%20or%20generate%20reports%2c%20amongst%20a%20number%20of%20other%20tasks%20that%20are%20either%20time%20consuming%2c%20prone%20to%20failure%20or%20can%20be%20done%20in%20an%20asynchronous%20manner%20that%20don%e2%80%99t%20impede%20the%20user%e2%80%99s%20workflow." aria-label="Tumblr">
+      <i class="fab fa-tumblr fa-lg" aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="https://news.ycombinator.com/submitlink?u=%2fposts%2flaravel-queues-in-production%2f&t=Laravel%20Queues%20in%20Production" aria-label="Hacker News">
+      <i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i>
+    </a>
+  </li>
+</ul>
 
+    </div>
 
+    <div id="actions-footer">
+      
+        <a id="menu-toggle" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;" aria-label="Menu">
+          <i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc-toggle" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;" aria-label="TOC">
+          <i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share-toggle" class="icon" href="#" onclick="$('#share-footer').toggle();return false;" aria-label="Share">
+          <i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" aria-label="Top of Page">
+          <i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
 </div>
 
-    
-    <p class="small">
-    
-       © Copyright 2019 <i class="fa fa-heart" aria-hidden="true"></i> 
-    
-    </p>
-    <p class="small">
-        Powered by <a href="http://www.gohugo.io/">Hugo</a> Theme By <a href="https://github.com/nodejh/hugo-theme-cactus-plus">nodejh</a>
-    </p>
+
+  <footer id="footer">
+  <div class="footer-left">
+    Copyright  &copy; 2021  Michael Raypold 
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+        <li><a href="/">Home</a></li>
+         
+        <li><a href="/posts">All posts</a></li>
+         
+        <li><a href="/tags">Tags</a></li>
+         
+        <li><a href="/about">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
 </footer>
 
-        </section>
 
-        <script src="/js/jquery-3.3.1.min.js"></script>
-<script src="/js/main.js"></script>
-<script src="/js/highlight.min.js"></script>
-<script>hljs.initHighlightingOnLoad();</script>
+  </div>
+</body>
 
-
-
-
+<link rel="stylesheet" href=/lib/font-awesome/css/all.min.css>
+<script src=/lib/jquery/jquery.min.js></script>
+<script src=/js/main.js></script>
+<script src=/js/code-copy.js></script>
 
 
 
-    </body>
 </html>

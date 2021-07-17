@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Reading on Michael Raypold</title>
+    <link>/tags/reading/</link>
+    <description>Recent content in Reading on Michael Raypold</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 15 Jul 2021 16:20:58 -0700</lastBuildDate><atom:link href="/tags/reading/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Influential Books</title>
+      <link>/posts/influential-books/</link>
+      <pubDate>Thu, 15 Jul 2021 16:20:58 -0700</pubDate>
+      
+      <guid>/posts/influential-books/</guid>
+      <description>The following are a few of the books which I’ve found impactful in my day-to-day thinking, work and career development since graduating from university.
+Measure What Matters: How Google, Bono, and the Gates Foundation Rock the World with OKRs Takeaways:
+ OKRs are incredibly valuable in their ability to focus an organization or team, but poorly constructed OKRs can do more damage than good. Clear goals and measurable results are a focus mechanism that help an organization scale out.</description>
+    </item>
+    
+  </channel>
+</rss>

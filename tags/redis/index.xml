@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Redis on Michael Raypold</title>
@@ -6,11 +6,7 @@
     <description>Recent content in Redis on Michael Raypold</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 20 Apr 2019 16:58:21 -0700</lastBuildDate>
-    
-	<atom:link href="/tags/redis/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Sat, 20 Apr 2019 16:58:21 -0700</lastBuildDate><atom:link href="/tags/redis/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Laravel Queues in Production</title>
       <link>/posts/laravel-queues-in-production/</link>
@@ -30,7 +26,7 @@ The queue provides a performant means to run background tasks that don’t block
       <description>The Laravel maintainers have begun to invest more time in providing features and tooling for managing Laravel in a distributed environment.
 Laravel 5.4 modified the withoutOverlapping() option for kernel tasks (PR #16196) to use the cache to create a lock and prevent overlapping scheduled tasks across instances.
 Laravel Horizon makes it easier to monitor and maintain Laravel powered Redis queues in both a distributed and single instance deployment.
-Laravel 5.</description>
+Laravel 5.5 includes TrustedProxy so that you can more easily place your application behind a load balancer.</description>
     </item>
     
   </channel>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Posts on Michael Raypold</title>
@@ -6,10 +6,17 @@
     <description>Recent content in Posts on Michael Raypold</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 20 Apr 2019 16:58:21 -0700</lastBuildDate>
-    
-	<atom:link href="/posts/index.xml" rel="self" type="application/rss+xml" />
-    
+    <lastBuildDate>Thu, 15 Jul 2021 16:20:58 -0700</lastBuildDate><atom:link href="/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Influential Books</title>
+      <link>/posts/influential-books/</link>
+      <pubDate>Thu, 15 Jul 2021 16:20:58 -0700</pubDate>
+      
+      <guid>/posts/influential-books/</guid>
+      <description>The following are a few of the books which I’ve found impactful in my day-to-day thinking, work and career development since graduating from university.
+Measure What Matters: How Google, Bono, and the Gates Foundation Rock the World with OKRs Takeaways:
+ OKRs are incredibly valuable in their ability to focus an organization or team, but poorly constructed OKRs can do more damage than good. Clear goals and measurable results are a focus mechanism that help an organization scale out.</description>
+    </item>
     
     <item>
       <title>Laravel Queues in Production</title>
@@ -22,16 +29,6 @@ The queue provides a performant means to run background tasks that don’t block
     </item>
     
     <item>
-      <title>Sofware Development and Opportunity Cost in a Startup</title>
-      <link>/posts/opportunity-cost-in-startups/</link>
-      <pubDate>Sat, 15 Dec 2018 09:12:04 -0800</pubDate>
-      
-      <guid>/posts/opportunity-cost-in-startups/</guid>
-      <description>Launching a startup and growing it to become a successful business is, as Reid Hoffman often puts, akin to jumping off a cliff and trying to assemble a plane on the way down. The trick is to get the plane assembled before you either pull the parachute and move on, or your half-assembled mess of parts, people and processes start colliding with the ground below.
-Building a company from nothing is difficult.</description>
-    </item>
-    
-    <item>
       <title>Laravel Distributed Maintenance Mode</title>
       <link>/posts/laravel-distributed-maintenance-mode/</link>
       <pubDate>Sat, 07 Oct 2017 06:50:24 -0700</pubDate>
@@ -40,7 +37,7 @@ Building a company from nothing is difficult.</description>
       <description>The Laravel maintainers have begun to invest more time in providing features and tooling for managing Laravel in a distributed environment.
 Laravel 5.4 modified the withoutOverlapping() option for kernel tasks (PR #16196) to use the cache to create a lock and prevent overlapping scheduled tasks across instances.
 Laravel Horizon makes it easier to monitor and maintain Laravel powered Redis queues in both a distributed and single instance deployment.
-Laravel 5.</description>
+Laravel 5.5 includes TrustedProxy so that you can more easily place your application behind a load balancer.</description>
     </item>
     
   </channel>
