@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Posts on Michael Raypold</title>
+    <link>/post/</link>
+    <description>Recent content in Posts on Michael Raypold</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 20 Apr 2019 16:58:21 -0700</lastBuildDate>
+    
+	<atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Laravel Queues in Production</title>
+      <link>/post/laravel-queues-in-production/</link>
+      <pubDate>Sat, 20 Apr 2019 16:58:21 -0700</pubDate>
+      
+      <guid>/post/laravel-queues-in-production/</guid>
+      <description>The Laravel queue and event system is one of the most powerful features of the framework and indispensable if you want to build a modern web application.
+The queue provides a performant means to run background tasks that don’t block your HTTP lifecycle, allowing you to serve up a responsive application to your customers. Typically, you would use the queue to send emails, collect metrics or generate reports, amongst a number of other tasks that are either time consuming, prone to failure or can be done in an asynchronous manner that don’t impede the user’s workflow.</description>
+    </item>
+    
+    <item>
+      <title>Sofware Development and Opportunity Cost in a Startup</title>
+      <link>/post/opportunity-cost-in-startups/</link>
+      <pubDate>Sat, 15 Dec 2018 09:12:04 -0800</pubDate>
+      
+      <guid>/post/opportunity-cost-in-startups/</guid>
+      <description>Launching a startup and growing it to become a successful business is, as Reid Hoffman often puts, akin to jumping off a cliff and trying to assemble a plane on the way down. The trick is to get the plane assembled before you either pull the parachute and move on, or your half-assembled mess of parts, people and processes start colliding with the ground below.
+Building a company from nothing is difficult.</description>
+    </item>
+    
+    <item>
+      <title>Laravel Distributed Maintenance Mode</title>
+      <link>/post/laravel-distributed-maintenance-mode/</link>
+      <pubDate>Sat, 07 Oct 2017 06:50:24 -0700</pubDate>
+      
+      <guid>/post/laravel-distributed-maintenance-mode/</guid>
+      <description>The Laravel maintainers have begun to invest more time in providing features and tooling for managing Laravel in a distributed environment.
+Laravel 5.4 modified the withoutOverlapping() option for kernel tasks (PR #16196) to use the cache to create a lock and prevent overlapping scheduled tasks across instances.
+Laravel Horizon makes it easier to monitor and maintain Laravel powered Redis queues in both a distributed and single instance deployment.
+Laravel 5.</description>
+    </item>
+    
+  </channel>
+</rss>
